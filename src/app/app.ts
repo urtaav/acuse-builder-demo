@@ -1,11 +1,27 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { FormElementsMenu } from "./forms-elements-menu/form-elements-menu";
+import { MainCanvas } from "./components/main-canvas/main-canvas";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  imports: [FormElementsMenu, MainCanvas],
+  template: `
+    <div class="flex flex-col h-screen bg-gray-100 px-4">
+      <div class="flex flex-col gap-1 items-center justify-center py-10">
+          <h1 class="text-2xl tracking-wide font-medium">
+          Acuse builder
+        </h1>
+        <p class="text-gray-500">
+          Create beautiful, responsive forms with Angular Material and TailwindCSS
+        </p>
+      </div>
+       <div class="flex gap-4 relative">
+          <app-form-elements-menu class="w-64"/>
+            <app-main-canvas class="flex-1"/>
+       </div>
+    </div>
+  `,
+  styles: [],
 })
 export class App {
   protected readonly title = signal('acuse-builder');
