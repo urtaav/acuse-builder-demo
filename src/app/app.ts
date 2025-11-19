@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { FormElementsMenu } from "./forms-elements-menu/form-elements-menu";
 import { MainCanvas } from "./components/main-canvas/main-canvas";
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-root',
-  imports: [FormElementsMenu, MainCanvas],
+  imports: [FormElementsMenu, MainCanvas,DragDropModule],
   template: `
     <div class="flex flex-col h-screen bg-gray-100 px-4">
       <div class="flex flex-col gap-1 items-center justify-center py-10">
@@ -15,7 +16,7 @@ import { MainCanvas } from "./components/main-canvas/main-canvas";
           Create beautiful, responsive forms with Angular Material and TailwindCSS
         </p>
       </div>
-       <div class="flex gap-4 relative">
+       <div class="flex gap-4 relative" cdkDropListGroup>
           <app-form-elements-menu class="w-64"/>
             <app-main-canvas class="flex-1"/>
        </div>
