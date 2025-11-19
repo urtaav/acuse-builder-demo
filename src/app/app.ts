@@ -1,11 +1,12 @@
 import { Component, signal } from '@angular/core';
-import { FormElementsMenu } from "./forms-elements-menu/form-elements-menu";
 import { MainCanvas } from "./components/main-canvas/main-canvas";
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FormElementsMenu } from './components/forms-elements-menu/form-elements-menu';
+import { SectionSettings } from "./components/section-settings/section-settings";
 
 @Component({
   selector: 'app-root',
-  imports: [FormElementsMenu, MainCanvas,DragDropModule],
+  imports: [FormElementsMenu, MainCanvas, DragDropModule, SectionSettings],
   template: `
     <div class="flex flex-col h-screen bg-gray-100 px-4">
       <div class="flex flex-col gap-1 items-center justify-center py-10">
@@ -18,7 +19,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
       </div>
        <div class="flex gap-4 relative" cdkDropListGroup>
           <app-form-elements-menu class="w-64"/>
-            <app-main-canvas class="flex-1"/>
+          <app-main-canvas class="flex-1"/>
+          <app-field-settings class="w-64"/>
        </div>
     </div>
   `,

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
-import { FieldTypes } from '../services/field-types';
 import { FieldButton } from './field-button/field-button';
+import { FieldTypes } from '../../services/field-types';
 
 @Component({
   selector: 'app-form-elements-menu',

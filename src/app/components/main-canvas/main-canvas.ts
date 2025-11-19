@@ -10,7 +10,8 @@ import { FormEditor } from "./form-editor/form-editor";
     selector: 'app-main-canvas',
     imports: [CommonModule, FormsModule, MatButtonToggleModule, MatButton, MatIcon, FormEditor],
     template: `
-     <div class="p-4 bg-white rounded-lg h-[calc(100vh-150px)] overflow-y-auto border-gray-200 shadow-sm">
+<div class="p-4 bg-white rounded-lg h-[calc(100vh-150px)] overflow-y-auto border-gray-200 shadow-sm">
+
          <div class="pb-4 border-b border-gray-200 flex gap-2 items-center">
              <h3 class="text-xl font-medium">Acuse Canvas</h3>
              <mat-button-toggle-group  [(value)]="activeTab" hideSigleSelectionIndicator="true">
@@ -19,7 +20,7 @@ import { FormEditor } from "./form-editor/form-editor";
              </mat-button-toggle-group>
             @if (activeTab() === 'editor') {
                 <div class="flex-1"></div>
-                <button mat-flat-button (click)="formService.addRow()">Add row
+                <button mat-flat-button (click)="formService.acuse()">Add row
                     <mat-icon class="ml-2">add_circle</mat-icon>
                 </button>
             }

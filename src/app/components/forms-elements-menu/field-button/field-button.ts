@@ -1,7 +1,7 @@
 import { Component, input, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { FieldTypeDefinition } from '../../models/field';
+import { FieldTypeDefinition } from '../../../models/field';
 
 @Component({
   selector: 'app-field-button',

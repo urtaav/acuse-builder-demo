@@ -1,0 +1,57 @@
+import { Component, input } from "@angular/core";
+import { Seccion } from "../../models/acuse";
+import { FormsModule } from "@angular/forms";
+
+@Component({
+  selector: 'app-section-uno',
+  imports: [FormsModule],
+  template: `
+<div class="p-6 bg-white rounded-xl shadow-sm border border-gray-200 space-y-6">
+
+      <!-- NOMBRE -->
+      <p class="text-xl font-semibold">{{ field().dsNombre }}</p>
+
+      <!-- TÍTULO -->
+      <div>
+        <p class="text-gray-600 mb-1 text-sm font-medium">Título</p>
+        <input
+          type="text"
+          class="border border-gray-300 rounded-lg px-3 py-2 text-sm w-1/2 bg-gray-100"
+          [ngModel]="field().dsTitulo"
+          readonly
+        />
+      </div>
+
+      <!-- COLUMNAS (auto-grid) -->
+      <div class="grid gap-6"
+           [class.grid-cols-1]="field().qtTipo === 1"
+           [class.grid-cols-2]="field().qtTipo === 2"
+           [class.grid-cols-3]="field().qtTipo === 3">
+
+        @for (col of field().registros[0].columnas; track col.id) {
+
+          <div class="flex flex-col ">
+            <label class="text-sm font-medium text-gray-700 mb-1">
+              {{ col.estilo.dsNombre }}
+            </label>
+
+            <textarea
+              rows="3"
+                      class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100 
+         resize-none leading-6 overflow-y-auto max-h-32"
+              [ngModel]="col.dsValor"
+              readonly
+            ></textarea>
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+  `,
+  styles: ``,
+})
+export class SectionUno {
+  field = input.required<Seccion>();
+}

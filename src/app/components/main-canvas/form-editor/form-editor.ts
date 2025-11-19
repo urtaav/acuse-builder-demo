@@ -4,64 +4,86 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Form } from '../../../services/form';
 import { FieldTypeDefinition, FormField } from '../../../models/field';
+import { JsonPipe } from '@angular/common';
+import { FormSectionComponent } from "../form-section/form-section";
+import { Seccion } from '../../../models/acuse';
 @Component({
     selector: 'app-form-editor',
-    imports: [DragDropModule, MatButtonModule, MatIconModule],
+    imports: [DragDropModule, MatButtonModule, MatIconModule, JsonPipe, FormSectionComponent],
     template: `
        <div  class="p-4">
-             @for (row of formService.rows(); track row.id) {
+             @for (row of formService.acuses(); track row.id) {
                 <div  
                 cdkDropList
                 [cdkDropListData]="row.id"
                 (cdkDropListDropped)="onDropInRow($event,row.id)"
                 [cdkDropListOrientation]="'mixed'"
                 class="relative p-5 pt-2 ps-10 mb-4 bg-white rounded-lg border-2 border-dashed border-gray-200">
-                    <div class="flex justify-between items-center">
-                          <span>Row</span>
-                            <button mat-icon-button (click)="formService.deleteRow(row.id)"><mat-icon>close</mat-icon></button>
-                    </div>
-                    <div class="flex gap-4 flex-wrap">
-                         @for (field of row.fields; track field.id) {
 
+                    <div class="flex gap-2 flex-col w-full">
+                         @for (section of row.secciones; track section.id) {
+                            <app-form-section-component cdkDrag [cdkDragData]="section" class="flex-1"  [section]="section"/>
                         } @empty {
                             <div class="w-full p-4 border border-dashed border-primary-container rounded text-center text-gray-400">
                                 Drag and drop from elements here
                             </div>
                     }
                     </div>
-                        <div class="absolute left-0 flex gap-0 flex-col top-1/2 -translate-y-1/2">
-                        <button mat-icon-button [disabled]="$first" (click)="formService.moveRowUp(row.id)">
-                        <mat-icon>keyboard_arrow_up</mat-icon>
-                        </button>
-                        <button mat-icon-button [disabled]="$last" (click)="formService.moveRowDown(row.id)">
-                        <mat-icon>keyboard_arrow_down</mat-icon>
-                        </button>
-                    </div>
                 </div>
              }
        </div>
+       <pre>
+        {{formService.acuses() | json}}
+       </pre>
     `,
     styles: ``,
 })
 export class FormEditor {
     formService = inject(Form);
 
+    private get firstAcuseId() {
+        return this.formService.acuses()[0]?.id;
+    }
+
+
     onDropInRow(event: CdkDragDrop<string>, rowId: string) {
-        console.log(event);
+        console.log(event.previousContainer.data);
         if (event.previousContainer.data === 'field-selector') {
             const fieldType = event.item.data as FieldTypeDefinition;
-            const newField: FormField = {
-                id: crypto.randomUUID(),
-                type: fieldType.type,
-                ...fieldType.defaultConfig
-            };
-            this.formService.addField(newField, rowId, event.currentIndex);
+            console.log(fieldType)
+
+            if (fieldType.type === 'seccion1') {
+                console.log("Agregar seccion1");
+                const id = this.firstAcuseId;
+                if (id) this.formService.addSeccionUnaColumna(id);
+
+            }
+            if (fieldType.type === 'seccion2') {
+                console.log("Agregar seccion2");
+                const id = this.firstAcuseId;
+                if (id) this.formService.addSeccionDosColumnas(id);
+
+            }
+            if (fieldType.type === 'seccion3') {
+                console.log("Agregar seccion3");
+                const id = this.firstAcuseId;
+                if (id) this.formService.addSeccionTresColumnas(id);
+
+            }
+            // const newField: FormField = {
+            //     id: crypto.randomUUID(),
+            //     type: fieldType.type,
+            //     ...fieldType.defaultConfig
+            // };
+            // this.formService.addField(newField, rowId, event.currentIndex);
             return;
         }
 
-        const dragData = event.item.data as FormField;
+        const dragData = event.item.data as Seccion;
+        console.log('dragData',dragData)
         const previousRowId = event.previousContainer.data as string;
-        this.formService.moveField(dragData.id, previousRowId, rowId, event.currentIndex);
+        console.log('dragpreviousRowIdData',previousRowId)
+        // this.formService.moveField(dragData.id, previousRowId, rowId, event.currentIndex);
 
     }
 }
