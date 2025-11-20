@@ -32,9 +32,10 @@ import { Seccion } from '../../../models/acuse';
                 </div>
              }
        </div>
-       <pre>
-        {{formService.acuses() | json}}
-       </pre>
+<pre class="max-h-80 overflow-auto bg-gray-900 text-green-300 text-xs p-4 rounded-lg whitespace-pre-wrap break-all">
+  {{ formService.acuses() | json }}
+</pre>
+
     `,
     styles: ``,
 })
@@ -70,12 +71,7 @@ export class FormEditor {
                 if (id) this.formService.addSeccionTresColumnas(id);
 
             }
-            // const newField: FormField = {
-            //     id: crypto.randomUUID(),
-            //     type: fieldType.type,
-            //     ...fieldType.defaultConfig
-            // };
-            // this.formService.addField(newField, rowId, event.currentIndex);
+
             return;
         }
 

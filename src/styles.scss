@@ -62,3 +62,12 @@ button[matButton] {
   border: 2px solid lightgray !important;
   background-color: lightgray !important;
 }
+
+// Source - https://stackoverflow.com/a
+// Posted by Mr.Sharp, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-11-19, License - CC BY-SA 4.0
+
+.mdc-notched-outline__notch
+{
+  border-right: none;
+}

@@ -9,7 +9,7 @@ import { FormsModule } from "@angular/forms";
 <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-200 space-y-6">
 
         <!-- NOMBRE -->
-      <p class="text-xl font-semibold">{{ field().dsNombre }}</p>
+      <!-- <p class="text-xl font-semibold">{{ field().dsNombre }}</p> -->
       <!-- TÍTULO -->
       <div>
         <p class="text-gray-600 mb-1 text-sm font-medium">Título</p>
@@ -29,9 +29,22 @@ import { FormsModule } from "@angular/forms";
         @for (col of field().registros[0].columnas; track col.id) {
 
           <div class="flex flex-col">
-            <label class="text-sm font-medium text-gray-700 mb-1">
-              {{ col.estilo.dsNombre }}
-            </label>
+            @if ($index === 0) {
+               <label class="text-sm font-medium text-gray-700 mb-1">
+                Descripción del Plazo
+              </label>
+            }
+             @if ($index === 1) {
+               <label class="text-sm font-medium text-gray-700 mb-1">
+                Plazo en días 
+              </label>
+            }
+
+              @if ($index === 2) {
+               <label class="text-sm font-medium text-gray-700 mb-1">
+                Fecha calculada (dd/mm/yyyy)
+              </label>
+            }
 
             <input
               type="text"

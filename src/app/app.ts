@@ -20,7 +20,7 @@ import { SectionSettings } from "./components/section-settings/section-settings"
        <div class="flex gap-4 relative" cdkDropListGroup>
           <app-form-elements-menu class="w-64"/>
           <app-main-canvas class="flex-1"/>
-          <app-field-settings class="w-64"/>
+          <app-field-settings class="min-w-[26rem] max-w-[29rem]"/>
        </div>
     </div>
   `,

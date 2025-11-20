@@ -53,16 +53,16 @@ export class Form {
         break;
       case 2:
         type = 'seccion2'
-         component = SectionDos
+        component = SectionDos
         break;
       case 3:
         type = 'seccion3'
-         component = SectionTres
+        component = SectionTres
         break;
 
       default:
         type = 'seccion1'
-              component = SectionUno
+        component = SectionUno
         break;
     }
     const seccion: Seccion = {
@@ -103,10 +103,10 @@ export class Form {
       idEstilo: null,
       dsColor: '#000000',
       dsFuente: 'Arial',
-      dsNombre: typeof nameOrType === 'string' ? `estilo-${nameOrType}` : 'estiloNormal',
+      dsNombre:  'estiloNormal',
       qtAlineacionH: 1,
       qtNegrita: 0,
-      qtTamanio: 8,
+      qtTamanio: 12,
     };
   }
 
@@ -116,7 +116,7 @@ export class Form {
   }
   private _selectedSectionId = signal<string | null>(null);
 
-   setSelectedSection(fieldId: string) {
+  setSelectedSection(fieldId: string) {
     this._selectedSectionId.set(fieldId);
   }
 
@@ -128,37 +128,133 @@ export class Form {
   })
 
   updateColumna(columnaId: string, valor: string) {
-  const acuse = this._acuses(); // <-- tu signal principal
+    const acuse = this._acuses(); // <-- tu signal principal
+
+    const newAcuse = acuse.map(a => ({
+      ...a,
+      secciones: a.secciones.map(seccion => ({
+        ...seccion,
+        registros: seccion.registros.map(reg => ({
+          ...reg,
+          columnas: reg.columnas.map(col =>
+            col.id === columnaId
+              ? { ...col, dsValor: valor }   // <-- aquí actualizas
+              : col
+          )
+        }))
+      }))
+    }));
+
+    this._acuses.set(newAcuse);
+  }
+
+  updateSeccion(seccionId: string, valor: string) {
+    const acuse = this._acuses(); // <-- tu signal principal
+
+    const newAcuse = acuse.map(a => ({
+      ...a,
+      secciones: a.secciones.map(seccion =>
+        seccion.id === seccionId ? { ...seccion, dsTitulo: valor } : seccion
+      )
+    }));
+
+    this._acuses.set(newAcuse);
+  }
+
+  addColumnaToSeccion(seccionId: string, seccionType: string) {
+  const acuse = this._acuses();
+
+  // Dependiendo del tipo, cuántas columnas agregar
+  const columnasPorAgregar =
+    seccionType === "seccion2" ? 2 :
+    seccionType === "seccion3" ? 3 : 0;
 
   const newAcuse = acuse.map(a => ({
     ...a,
-    secciones: a.secciones.map(seccion => ({
+    secciones: a.secciones.map(seccion => {
+
+      if (seccion.id !== seccionId) return seccion;
+      if (columnasPorAgregar === 0) return seccion;
+
+      const currentCols = seccion.registros[0].columnas.length;
+
+      // ⬇ Generar N columnas nuevas
+      const nuevasColumnas = Array.from({ length: columnasPorAgregar }, (_, i) =>
+        this.createColumna(currentCols + i + 1)
+      );
+
+      return {
+        ...seccion,
+        registros: seccion.registros.map(reg => ({
+          ...reg,
+          columnas: [...reg.columnas, ...nuevasColumnas] // ⬅ Agregar lote completo
+        }))
+      };
+    })
+  }));
+
+  this._acuses.set(newAcuse);
+}
+
+
+addRegistroToSeccion(seccionId: string, seccionType: string) {
+  const acuse = this._acuses();
+
+  // Cantidad de columnas por tipo
+  const columnasPorRegistro =
+    seccionType === "seccion2" ? 2 :
+    seccionType === "seccion3" ? 3 : 0;
+
+  if (columnasPorRegistro === 0) return;
+
+  const newAcuse = acuse.map(a => ({
+    ...a,
+    secciones: a.secciones.map(seccion => {
+
+      if (seccion.id !== seccionId) return seccion;
+
+      // Crear el nuevo registro usando tu constructor oficial
+      const nuevoRegistro: Registro = this.createRegistro(columnasPorRegistro);
+
+      return {
+        ...seccion,                   // 🔥 Mantenemos todas las propiedades obligatorias
+        registros: [
+          ...seccion.registros,
+          nuevoRegistro               // 🔥 Agregamos el registro nuevo
+        ]
+      } satisfies Seccion;            // 🔥 Garantiza tipado exacto
+    })
+  }));
+
+  this._acuses.set(newAcuse);
+}
+updateColumnaStyle(columnaId: string, field: keyof Estilo, value: any) {
+  const acuses = this._acuses();
+
+  const newAcuses = acuses.map(acuse => ({
+    ...acuse,
+    secciones: acuse.secciones.map(seccion => ({
       ...seccion,
-      registros: seccion.registros.map(reg => ({
-        ...reg,
-        columnas: reg.columnas.map(col =>
-          col.id === columnaId
-            ? { ...col, dsValor: valor }   // <-- aquí actualizas
-            : col
+      registros: seccion.registros.map(registro => ({
+        ...registro,
+        columnas: registro.columnas.map(columna =>
+          columna.id === columnaId
+            ? {
+                ...columna,
+                estilo: {
+                  ...columna.estilo,
+                  [field]: value
+                }
+              }
+            : columna
         )
       }))
     }))
   }));
 
-  this._acuses.set(newAcuse);
+  this._acuses.set(newAcuses);
 }
 
-  updateSeccion(seccionId: string, valor: string) {
-  const acuse = this._acuses(); // <-- tu signal principal
 
-  const newAcuse = acuse.map(a => ({
-    ...a,
-    secciones: a.secciones.map(seccion => 
-      seccion.id === seccionId ? { ...seccion, dsTitulo: valor } : seccion
-    )
-  }));
-
-  this._acuses.set(newAcuse);
-}
 
 }
