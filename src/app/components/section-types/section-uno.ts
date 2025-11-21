@@ -8,7 +8,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
   selector: 'app-section-uno',
   imports: [FormsModule,MatFormFieldModule,MatInputModule],
   template: `
-<div class="p-6 bg-white rounded-sm  border border-gray-200 space-y-6">
+   <div class="p-6 bg-white rounded-sm  border border-gray-200 space-y-6">
 
       <!-- NOMBRE -->
       <!-- <p class="text-xl font-semibold">{{ field().dsNombre }}</p> -->

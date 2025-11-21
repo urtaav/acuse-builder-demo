@@ -1,27 +1,27 @@
 import { Type } from "@angular/core";
 
 export interface Acuse {
-  id: string;
+  id:  string | number;
   nombre: string;
   idOrganoGarante:number;
   secciones: Seccion[];
 }
 
 export interface Seccion {
-  id: string;
-  dsNombre: string;
-  dsTitulo: string;
+  id:  string | number;
+  dsNombre: string 
+  dsTitulo: string | null;
   fgVisible: number;
   qtPosicion: number;
   qtTipo: number;
   type:string;
   estilo: Estilo;
   registros: Registro[];
-  component: Type<unknown>;
+  component?: Type<unknown>;
 }
 
 export interface Estilo {
-  idEstilo: number | null;
+  id: string | number | null;
   dsColor: string;
   dsFuente: string;
   dsNombre: string;
@@ -31,7 +31,7 @@ export interface Estilo {
 }
 
 export interface Columna {
-  id: string;
+  id: string | number;
   qtPosicion: number;
   dsValor: string;
   estilo: Estilo;
@@ -39,7 +39,7 @@ export interface Columna {
 }
 
 export interface Registro {
-  id: string;
+  id:  string | number;
   fgVisible: number;
   qtPosicion: number;
   columnas: Columna[];

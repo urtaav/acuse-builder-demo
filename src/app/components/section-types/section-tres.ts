@@ -20,18 +20,20 @@ import { FormsModule } from "@angular/forms";
           readonly
         />
       </div>
-
+      <!-- TODOS LOS REGISTROS -->
+      @for (registro of field().registros; track registro.id) {
+                <div class="space-y-3 border border-gray-200 rounded-lg p-4 bg-gray-50">
       <div class="grid gap-4"
            [class.grid-cols-1]="field().qtTipo === 1"
            [class.grid-cols-2]="field().qtTipo === 2"
            [class.grid-cols-3]="field().qtTipo === 3">
 
-        @for (col of field().registros[0].columnas; track col.id) {
+        @for (col of registro.columnas; track col.id) {
 
           <div class="flex flex-col">
             @if ($index === 0) {
                <label class="text-sm font-medium text-gray-700 mb-1">
-                Descripción del Plazo
+                Descripción del Plazo {{$index}}
               </label>
             }
              @if ($index === 1) {
@@ -56,6 +58,9 @@ import { FormsModule } from "@angular/forms";
 
         }
       </div>
+                </div>
+      }
+
     </div>
   `,
   styles: ``,

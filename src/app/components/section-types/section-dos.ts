@@ -47,6 +47,7 @@ import { MatSelectModule } from "@angular/material/select";
                   <textarea
                     rows="3"
                     class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100 resize-none overflow-y-auto max-h-32"
+
                     readonly
                     [ngModel]="col.dsValor"
                   ></textarea>
@@ -55,7 +56,17 @@ import { MatSelectModule } from "@angular/material/select";
                 <!-- TIPO 2 o 3 → input normal -->
                 @else {
 
-                  @if ($index === 0) {
+                  <input
+                    type="text"
+                    class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100"
+                    [style.color]="col.estilo.dsColor"
+                    [style.font-weight]="col.estilo.qtNegrita === 1 ? 'bold' : 'normal'"
+                    [style.text-align]="col.estilo.qtAlineacionH === 1 ? 'left' : col.estilo.qtAlineacionH === 2 ? 'center' : 'right'"
+                    [style.font-size.px]="col.estilo.qtTamanio"
+                    readonly
+                    [ngModel]="col.dsValor"
+                  />
+                  <!-- @if ($index === 0) {
                   <input
                     type="text"
                     class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100"
@@ -73,7 +84,7 @@ import { MatSelectModule } from "@angular/material/select";
                           }
                         </mat-select>
                     </mat-form-field>
-                  }
+                  } -->
              
                 }
 

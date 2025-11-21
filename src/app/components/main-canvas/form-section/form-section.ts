@@ -9,15 +9,15 @@ import { Form } from "../../../services/form";
   selector: 'app-form-section-component',
   imports: [MatButtonModule, MatIconModule, SectionPreview],
   template: `
-      <div class="bg-white p-4 pt-1 rounded-lg shadow-sm border border-gray-200 hover:border-black cursor-pointer"
-       [class]="formService.selectedSection()?.id === section().id ? '!border-black' : ''"
+      <div class="bg-white p-4 pt-1 rounded-sm shadow-sm border-2 border-gray-200 hover:border-black cursor-pointer"
+       [class]="formService.selectedSection()?.id === section().id ? '!border-pink-200' : ''"
        (click)="formService.setSelectedSection(section().id)">
         <div class="flex items-center justify-end mb-1">
-            <button mat-icon-button (click)="deleteField($event)"><mat-icon class="mr-2">delete</mat-icon></button>
+            <button mat-icon-button (click)="deleteSection($event)"><mat-icon class="mr-2">delete</mat-icon></button>
         </div>
         <app-section-preview [section]="section()"/>
       </div>
-      
+    
       `,
   styles: ``,
 })
@@ -25,7 +25,9 @@ export class FormSectionComponent {
   formService = inject(Form);
   section = input.required<Seccion>();
 
-  deleteField(event: Event) {
-    event.stopPropagation();
-  }
+deleteSection(event: Event) {
+  event.stopPropagation();
+  this.formService.deleteSection(this.section().id);
+}
+
 }
