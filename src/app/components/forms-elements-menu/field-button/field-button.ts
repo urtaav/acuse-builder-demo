@@ -76,7 +76,7 @@ const SECTION_THREE = `
     [cdkDragData]="field()"
     (cdkDragStarted)="whileDragging.set(true)"
     (cdkDragEnded)="whileDragging.set(false)"
-    class="w-full p-3 border border-gray-200 hover:border-black hover:shadow-md transition-shadow rounded-lg flex items-center gap-3 cursor-pointer">
+    class="w-full p-2 border border-gray-200 hover:border-black hover:shadow-md transition-shadow rounded-lg flex items-center gap-2 cursor-pointer">
       <div class="rounded-md bg-gray-100 flex items-center justify-center p-1">
           <mat-icon [svgIcon]="field().icon"  class="scale-75">{{field().icon}}</mat-icon>
       </div>
