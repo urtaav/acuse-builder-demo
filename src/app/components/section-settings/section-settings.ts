@@ -14,12 +14,17 @@ import { Estilo } from "../../models/acuse";
     imports: [MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatIconModule, MatSelectModule],
     template: `
         <div class="p-6 bg-white rounded-lg h-[calc(100vh-150px)] overflow-y-auto border border-gray-200 shadow-sm">
-
+    <div class="flex items-center justify-end mb-4">
+        <button
+          mat-icon-button
+          (click)="formService.setSelectedSection(null)"
+          class="text-blue-600 hover:text-blue-700"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      
+    </div>
   @if (formService.selectedSection(); as section) {
-
-    <!-- <h5 class="text-base font-semibold mb-6">
-      Aquí puedes actualizar el contenido y su formato.
-    </h5> -->
 
     <!-- TÍTULO -->
     <mat-form-field appearance="outline" class="w-full mb-8">

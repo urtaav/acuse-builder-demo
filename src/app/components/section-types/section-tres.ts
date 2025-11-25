@@ -33,7 +33,7 @@ import { FormsModule } from "@angular/forms";
           <div class="flex flex-col">
             @if ($index === 0) {
                <label class="text-sm font-medium text-gray-700 mb-1">
-                Descripción del Plazo {{$index}}
+                Descripción del Plazo
               </label>
             }
              @if ($index === 1) {
@@ -44,22 +44,34 @@ import { FormsModule } from "@angular/forms";
 
               @if ($index === 2) {
                <label class="text-sm font-medium text-gray-700 mb-1">
-                Fecha calculada (dd/mm/yyyy)
+                Fecha 
               </label>
             }
 
-            <input
-              type="text"
-              class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100"
-              [ngModel]="col.dsValor"
-              readonly
-            />
-          </div>
+             @if ($index === 1) {
+             <input
+                type="number"
+                min="1"
+                max="100"
+                class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100"
+                [value]="col.dsValor"  
+                
+              />
+             } @else {
+                           <input
+                type="text"
+                class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100"
+                [value]="$index === 2 ? '' : col.dsValor"  
+                [placeholder]="$index === 2 ? 'dd/mm/yyyy' : ''"  
+                readonly
+              />
+             }
 
+          </div>
         }
       </div>
-                </div>
-      }
+    </div>
+    }
 
     </div>
   `,

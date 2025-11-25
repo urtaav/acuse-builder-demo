@@ -45,6 +45,9 @@ import { FormSectionComponent } from "../form-section/form-section";
                 </div>
              }
        </div>
+          <pre class="max-h-80 overflow-auto bg-gray-900 text-green-300 text-xs p-4 rounded-lg whitespace-pre-wrap break-all">
+        {{ formService.encabezado() | json }}
+        </pre>
         <pre class="max-h-80 overflow-auto bg-gray-900 text-green-300 text-xs p-4 rounded-lg whitespace-pre-wrap break-all">
         {{ formService.acuses() | json }}
         </pre>

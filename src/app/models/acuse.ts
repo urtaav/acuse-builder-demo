@@ -1,5 +1,22 @@
 import { Type } from "@angular/core";
 
+export interface Encabezado {
+  id:  string | number;
+  dsFecha: string;
+  dsSubtitulo:string;
+  dsTituloPrincipal: string;
+  dsTituloSecundario: string | null;
+  dsLogoDerecho: Logo | null;
+  dsLogoIzquierdo: Logo | null;
+  acuses: Acuse[];
+}
+interface Logo {
+  base64: string;
+  filename: string;
+  filetype: string;
+  filesize: number;
+}
+
 export interface Acuse {
   id:  string | number;
   nombre: string;
