@@ -10,9 +10,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { Estilo } from "../../models/acuse";
 
 @Component({
-    selector: 'app-field-settings',
-    imports: [MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatIconModule, MatSelectModule],
-    template: `
+  selector: 'app-field-settings',
+  imports: [MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatIconModule, MatSelectModule],
+  template: `
         <div class="p-6 bg-white rounded-lg h-[calc(100vh-150px)] overflow-y-auto border border-gray-200 shadow-sm">
     <div class="flex items-center justify-end mb-4">
         <button
@@ -40,7 +40,7 @@ import { Estilo } from "../../models/acuse";
 
     <!-- BOTÓN AGREGAR REGISTRO -->
     <div class="flex items-center justify-end mb-4">
-      @if (canAddRegistros(section.type, section.registros.length)) {
+      @if (canAddRegistros(section.type, section.sisaiTwAcuseRegistros.length)) {
         <button
           mat-icon-button
           (click)="addRegistroToSeccion()"
@@ -51,7 +51,7 @@ import { Estilo } from "../../models/acuse";
       }
     </div>
 
-    @for (registro of section.registros; track registro.id) {
+    @for (registro of section.sisaiTwAcuseRegistros; track registro.id) {
 
       <div class="border-none rounded-xl p-4 mb-6 bg-gray-50">
 
@@ -63,7 +63,7 @@ import { Estilo } from "../../models/acuse";
           [class.grid-cols-2]="section.type === 'seccion3'"
         >
 
-          @for (columna of registro.columnas; let i = $index; track columna.id) {
+          @for (columna of registro.sisaiTwAcuseColumnas; let i = $index; track columna.id) {
 
             <!--  BARRA DE ESTILOS: SIEMPRE AJUSTADA A LA CELDA CORRESPONDIENTE -->
             @if(i != 2){
@@ -72,16 +72,16 @@ import { Estilo } from "../../models/acuse";
          
               <!-- Color -->
               <input type="color"
-                [ngModel]="columna.estilo.dsColor"
+                [ngModel]="columna.sisaiTwAcuseEstilo.dsColor"
                 (ngModelChange)="updateStyle(columna.id, 'dsColor', $event)"
                 class="w-6 h-6 p-0 border rounded cursor-pointer"
               />
 
               <!-- Bold -->
               <button
-                (click)="updateStyle(columna.id, 'qtNegrita', columna.estilo.qtNegrita === 1 ? 0 : 1)"
+                (click)="updateStyle(columna.id, 'qtNegrita', columna.sisaiTwAcuseEstilo.qtNegrita === 1 ? 0 : 1)"
                 class="w-7 h-7 text-xs flex items-center justify-center border rounded hover:bg-gray-200"
-                [class.font-bold]="columna.estilo.qtNegrita === 1"
+                [class.font-bold]="columna.sisaiTwAcuseEstilo.qtNegrita === 1"
               >
                 B
               </button>
@@ -108,7 +108,7 @@ import { Estilo } from "../../models/acuse";
               <input type="number"
                 min="8"
                 max="16"
-                [ngModel]="columna.estilo.qtTamanio"
+                [ngModel]="columna.sisaiTwAcuseEstilo.qtTamanio"
                 (ngModelChange)="updateStyle(columna.id, 'qtTamanio', $event)"
                 class="w-14 h-7 px-1 text-xs border rounded"
               />
@@ -164,7 +164,7 @@ import { Estilo } from "../../models/acuse";
                   <mat-label>Variable</mat-label>
                   <mat-select
                     [ngModel]="columna.dsValor"
-                    (ngModelChange)="updateColumna(columna.id, $event)"
+                    (ngModelChange)="updateColumna(columna.id, $event, section.type)"
                   >
                     @for (option of optionsVariables(); track option) {
                       <mat-option [value]="option.dsVariable">
@@ -179,32 +179,23 @@ import { Estilo } from "../../models/acuse";
             <!--  SECCIÓN 3 (3 columnas) -->
             @else if (section.type === 'seccion3') {
 
+              @if ($index === 0 || $index === 1) {
               <mat-form-field appearance="outline" class="w-full">
-                @if ($index === 0) { <mat-label>Descripción del Plazo </mat-label> }
-                @if ($index === 1) { <mat-label>Plazo en días</mat-label> }
-                @if ($index === 2) { <mat-label>Fecha calculada (dd/mm/yyyy)</mat-label> }
+                <mat-label>
+                  {{ $index === 0 ? 'Descripción del Plazo' : 'Plazo en días' }}
+                </mat-label>
 
-                @if ($index === 1) {
                 <input
-                  matInput
-                  [min]="1"
-                  [max]="100"
-                  type="number"
-                  [ngModel]="columna.dsValor"
-                  (ngModelChange)="updateColumna(columna.id, $event)"
-                />
-                } @else{
-                <input
-                  matInput
-                  type="text"
-                  [ngModel]="columna.dsValor"
-                  (ngModelChange)="updateColumna(columna.id, $event)"
-                  [disabled]="$index === 2"
-                />
-
-                }
-
+                    matInput
+                    [type]="$index === 0 ? 'text' : 'number'"
+                    [min]="$index === 1 ? 1 : null"
+                    [max]="$index === 1 ? 100 : null"
+                    [ngModel]="columna.dsValor"
+                    (ngModelChange)="updateColumna(columna.id, $event)"
+                  />
               </mat-form-field>
+
+              }
 
             }
 
@@ -234,111 +225,118 @@ import { Estilo } from "../../models/acuse";
 </div>
 
     `,
-    styles: ``,
+  styles: ``,
 })
 export class SectionSettings {
-    formService = inject(Form);
-    fieldTypeService = inject(FieldTypes);
+  formService = inject(Form);
+  fieldTypeService = inject(FieldTypes);
 
-    optionsVariables = this.formService.optionsVariables;
+  optionsVariables = this.formService.optionsVariables;
 
-    private readonly maxColumnsByType: Record<string, number> = {
-        seccion2: 10,
-        seccion3: 18 // tu límite actual
-    };
+  private readonly maxColumnsByType: Record<string, number> = {
+    seccion2: 10,
+    seccion3: 18 // tu límite actual
+  };
 
-    fieldValues = computed(() => {
-        const field = this.formService.selectedSection();
-        if (!field) return {};
-        return field as any;
+  fieldValues = computed(() => {
+    const field = this.formService.selectedSection();
+    if (!field) return {};
+    return field as any;
+  });
+
+  updateColumna(fieldId: string | number, value: any, typeSection?: string) {
+    console.log(fieldId, value);
+
+    if (typeSection === 'seccion1' || typeSection === 'seccion2') {
+      const friendlyValue = this.formService.converterMaskBeforShowInUI(value);
+      this.formService.updateColumna(fieldId, friendlyValue);
+    } else{
+      this.formService.updateColumna(fieldId, value);
+    }
+
+   
+  }
+
+  updateSeccion(fieldId: string | number, value: any) {
+    console.log(fieldId, value);
+    this.formService.updateSeccion(fieldId, value);
+  }
+
+  addColum() {
+    const section = this.formService.selectedSection();
+    if (section) {
+      this.formService.addColumnaToSeccion(section.id, section.type);
+    }
+  }
+
+  addRegistroToSeccion() {
+    const section = this.formService.selectedSection();
+    if (section) {
+      this.formService.addRegistroToSeccion(section.id, section.type);
+    }
+  }
+
+  canAddRegistros(sectionType: string, currentRegistros: number): boolean {
+    const limit = this.maxColumnsByType[sectionType];
+
+    if (sectionType === 'seccion2') {
+      return currentRegistros + 2 <= limit;
+    }
+
+    if (sectionType === 'seccion3') {
+      return currentRegistros + 3 <= limit;
+    }
+
+    return false;
+  }
+
+  updateStyle(columnaId: string | number, field: keyof Estilo, value: any) {
+    this.formService.updateColumnaStyle(columnaId, field, value);
+  }
+
+  // Insert value in the textarea at the cursor position
+  // variables para guardar el textarea enfocado
+  lastTextarea: HTMLTextAreaElement | null = null;
+  cursorStart: number = 0;
+  cursorEnd: number = 0;
+  selectedVariableValue: string | null = null;
+
+  // cuando se hace focus en cualquier textarea, guardamos la referencia y posiciones
+  onFocusTextarea(event: any) {
+    this.lastTextarea = event.target as HTMLTextAreaElement;
+  }
+
+  onCursorChange() {
+    if (this.lastTextarea) {
+      this.cursorStart = this.lastTextarea.selectionStart;
+      this.cursorEnd = this.lastTextarea.selectionEnd;
+    }
+  }
+
+  // insertar variable seleccionada en el cursor
+  insertValueIntoTextarea(valueSelected: string, columna: any) {
+    if (!this.lastTextarea) return;
+
+    const original = columna.dsValor ?? '';
+
+    const inicio = original.substring(0, this.cursorStart);
+    const fin = original.substring(this.cursorEnd);
+
+    const insert = `<${valueSelected}>`;
+
+    const nuevoValor = inicio + insert + fin;
+
+    // actualiza ngModel manualmente
+    columna.dsValor = nuevoValor;
+
+    // aplica el valor al DOM
+    setTimeout(() => {
+      this.lastTextarea!.focus();
+      this.lastTextarea!.selectionStart = this.cursorStart + insert.length;
+      this.lastTextarea!.selectionEnd = this.cursorStart + insert.length;
+      // this.selectedVariableValue = null; // reset selected variable after insertion
     });
 
-    updateColumna(fieldId: string | number, value: any) {
-        console.log(fieldId, value);
-        const friendlyValue =  this.formService.converterMaskBeforShowInUI(value);
-        this.formService.updateColumna(fieldId, friendlyValue);
-    }
-
-    updateSeccion(fieldId: string | number , value: any) {
-        console.log(fieldId, value);
-        this.formService.updateSeccion(fieldId, value);
-    }
-
-    addColum() {
-        const section = this.formService.selectedSection();
-        if (section) {
-            this.formService.addColumnaToSeccion(section.id, section.type);
-        }
-    }
-
-    addRegistroToSeccion() {
-        const section = this.formService.selectedSection();
-        if (section) {
-            this.formService.addRegistroToSeccion(section.id, section.type);
-        }
-    }
-
-    canAddRegistros(sectionType: string, currentRegistros: number): boolean {
-        const limit = this.maxColumnsByType[sectionType];
-
-        if (sectionType === 'seccion2') {
-            return currentRegistros + 2 <= limit;
-        }
-
-        if (sectionType === 'seccion3') {
-            return currentRegistros + 3 <= limit;
-        }
-
-        return false;
-    }
-
-    updateStyle(columnaId: string | number, field: keyof Estilo, value: any) {
-        this.formService.updateColumnaStyle(columnaId, field, value);
-    }
-
-    // Insert value in the textarea at the cursor position
-    // variables para guardar el textarea enfocado
-    lastTextarea: HTMLTextAreaElement | null = null;
-    cursorStart: number = 0;
-    cursorEnd: number = 0;
-    selectedVariableValue: string | null = null;
-
-    // cuando se hace focus en cualquier textarea, guardamos la referencia y posiciones
-    onFocusTextarea(event: any) {
-        this.lastTextarea = event.target as HTMLTextAreaElement;
-    }
-
-    onCursorChange() {
-        if (this.lastTextarea) {
-            this.cursorStart = this.lastTextarea.selectionStart;
-            this.cursorEnd = this.lastTextarea.selectionEnd;
-        }
-    }
-
-    // insertar variable seleccionada en el cursor
-    insertValueIntoTextarea(valueSelected: string, columna: any) {
-        if (!this.lastTextarea) return;
-
-        const original = columna.dsValor ?? '';
-
-        const inicio = original.substring(0, this.cursorStart);
-        const fin = original.substring(this.cursorEnd);
-
-        const insert = `<${valueSelected}>`;
-
-        const nuevoValor = inicio + insert + fin;
-
-        // actualiza ngModel manualmente
-        columna.dsValor = nuevoValor;
-
-        // aplica el valor al DOM
-        setTimeout(() => {
-            this.lastTextarea!.focus();
-            this.lastTextarea!.selectionStart = this.cursorStart + insert.length;
-            this.lastTextarea!.selectionEnd = this.cursorStart + insert.length;
-            // this.selectedVariableValue = null; // reset selected variable after insertion
-        });
-
-    }
+  }
 
 }

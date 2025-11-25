@@ -20,10 +20,10 @@ import { FormSectionComponent } from "../form-section/form-section";
                 class="relative p-5 pt-2 ps-10 mb-4 bg-white rounded-sm border-2 border-dashed border-gray-200">
                     <div       
                             cdkDropList
-                            [cdkDropListData]="row.secciones"
+                            [cdkDropListData]="row.sisaiTwAcuseSeccions"
                             (cdkDropListDropped)="onDropSection($event, row.id)" 
                             class="flex gap-2 flex-col w-full">
-                         @for (section of row.secciones; track section.id) {
+                         @for (section of row.sisaiTwAcuseSeccions; track section.id) {
                             <div cdkDrag [cdkDragData]="section" class="border rounded">
 
                                 <div 
@@ -45,12 +45,12 @@ import { FormSectionComponent } from "../form-section/form-section";
                 </div>
              }
        </div>
-          <pre class="max-h-80 overflow-auto bg-gray-900 text-green-300 text-xs p-4 rounded-lg whitespace-pre-wrap break-all">
+          <!-- <pre class="max-h-80 overflow-auto bg-gray-900 text-green-300 text-xs p-4 rounded-lg whitespace-pre-wrap break-all">
         {{ formService.encabezado() | json }}
         </pre>
         <pre class="max-h-80 overflow-auto bg-gray-900 text-green-300 text-xs p-4 rounded-lg whitespace-pre-wrap break-all">
         {{ formService.acuses() | json }}
-        </pre>
+        </pre> -->
 
     `,
     styles: ``,

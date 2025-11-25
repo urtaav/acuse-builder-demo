@@ -1,14 +1,26 @@
 import { Type } from "@angular/core";
 
+export interface AcuseBuilder {
+  idAcuse: number | null;
+  logoDerecho: Logo | null;
+  logoIzquierdo: Logo | null;
+  datosUser: any;
+  estadoAnteriorJSON: string | null;
+  idOrganoGarante: number;
+  idEntidadFederativa: number;
+  nombre: string;
+  idTipoSolicitud: number;
+  acuseEncabezado: Encabezado;
+}
+
 export interface Encabezado {
-  id:  string | number;
   dsFecha: string;
   dsSubtitulo:string;
   dsTituloPrincipal: string;
   dsTituloSecundario: string | null;
-  dsLogoDerecho: Logo | null;
-  dsLogoIzquierdo: Logo | null;
-  acuses: Acuse[];
+  dsLogoDerecho?: string | null;        // base64 string para el backend
+  dsLogoIzquierdo?: string | null;
+  sisaiTwAcuses: Acuse[];
 }
 interface Logo {
   base64: string;
@@ -21,7 +33,9 @@ export interface Acuse {
   id:  string | number;
   nombre: string;
   idOrganoGarante:number;
-  secciones: Seccion[];
+  idEntidadFederativa:number;
+  tipoSolicitud:number;
+  sisaiTwAcuseSeccions: Seccion[];
 }
 
 export interface Seccion {
@@ -32,8 +46,8 @@ export interface Seccion {
   qtPosicion: number;
   qtTipo: number;
   type:string;
-  estilo: Estilo;
-  registros: Registro[];
+  sisaiTwAcuseEstilo: Estilo;
+  sisaiTwAcuseRegistros: Registro[];
   component?: Type<unknown>;
 }
 
@@ -51,7 +65,7 @@ export interface Columna {
   id: string | number;
   qtPosicion: number;
   dsValor: string;
-  estilo: Estilo;
+  sisaiTwAcuseEstilo: Estilo;
 
 }
 
@@ -59,5 +73,5 @@ export interface Registro {
   id:  string | number;
   fgVisible: number;
   qtPosicion: number;
-  columnas: Columna[];
+  sisaiTwAcuseColumnas: Columna[];
 }

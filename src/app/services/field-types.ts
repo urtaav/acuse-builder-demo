@@ -7,19 +7,19 @@ import { SectionTres } from '../components/section-types/section-tres';
 const SECTION_UNO_DEFINITION: FieldTypeDefinition = {
     type: 'seccion1',
     label: 'Sección Uno',
-    icon: 'text_fields',
+    icon: 'section_one',
     component: SectionUno
 }
 const SECTION_DOS_DEFINITION: FieldTypeDefinition = {
     type: 'seccion2',
     label: 'Sección Dos',
-    icon: 'text_fields',
+    icon: 'section_two',
      component: SectionDos
 }
 const SECTION_TRES_DEFINITION: FieldTypeDefinition = {
     type: 'seccion3',
     label: 'Sección Tres',
-    icon: 'text_fields',
+    icon: 'section_three',
      component: SectionTres
 }
 @Injectable({

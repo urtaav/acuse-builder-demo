@@ -21,54 +21,56 @@ import { FormsModule } from "@angular/forms";
         />
       </div>
       <!-- TODOS LOS REGISTROS -->
-      @for (registro of field().registros; track registro.id) {
+      @for (registro of field().sisaiTwAcuseRegistros; track registro.id) {
                 <div class="space-y-3 border border-gray-200 rounded-lg p-4 bg-gray-50">
       <div class="grid gap-4"
            [class.grid-cols-1]="field().qtTipo === 1"
            [class.grid-cols-2]="field().qtTipo === 2"
            [class.grid-cols-3]="field().qtTipo === 3">
 
-        @for (col of registro.columnas; track col.id) {
+          @for (col of registro.sisaiTwAcuseColumnas; track col.id) {
 
-          <div class="flex flex-col">
-            @if ($index === 0) {
-               <label class="text-sm font-medium text-gray-700 mb-1">
-                Descripción del Plazo
-              </label>
+              <div class="flex flex-col">
+
+                <!-- LABEL DINÁMICO -->
+                <label class="text-sm font-medium text-gray-700 mb-1">
+                  {{
+                    $index === 0 ? 'Descripción del Plazo' :
+                    $index === 1 ? 'Plazo en días' :
+                    'Fecha'
+                  }}
+                </label>
+
+                <!-- INPUT ÚNICO, CON PROPIEDADES DINÁMICAS -->
+                <input
+                  [type]="
+                    $index === 1 ? 'number' :
+                    $index === 2 ? 'text' :
+                    'text'
+                  "
+
+                  [min]="$index === 1 ? 1 : null"
+                  [max]="$index === 1 ? 100 : null"
+
+                  [readonly]="$index !== 1"  
+
+                  [placeholder]="$index === 2 ? 'dd/mm/yyyy' : ''"
+
+                  [value]="$index === 2 ? '' : col.dsValor"
+
+                  class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100"
+
+                  [style.color]="col.sisaiTwAcuseEstilo.dsColor"
+                  [style.font-weight]="col.sisaiTwAcuseEstilo.qtNegrita === 1 ? 'bold' : 'normal'"
+                  [style.text-align]="
+                    col.sisaiTwAcuseEstilo.qtAlineacionH === 1 ? 'left' :
+                    col.sisaiTwAcuseEstilo.qtAlineacionH === 2 ? 'center' :
+                    'right'
+                  "
+                  [style.font-size.px]="col.sisaiTwAcuseEstilo.qtTamanio"
+                />
+              </div>
             }
-             @if ($index === 1) {
-               <label class="text-sm font-medium text-gray-700 mb-1">
-                Plazo en días 
-              </label>
-            }
-
-              @if ($index === 2) {
-               <label class="text-sm font-medium text-gray-700 mb-1">
-                Fecha 
-              </label>
-            }
-
-             @if ($index === 1) {
-             <input
-                type="number"
-                min="1"
-                max="100"
-                class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100"
-                [value]="col.dsValor"  
-                
-              />
-             } @else {
-                           <input
-                type="text"
-                class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100"
-                [value]="$index === 2 ? '' : col.dsValor"  
-                [placeholder]="$index === 2 ? 'dd/mm/yyyy' : ''"  
-                readonly
-              />
-             }
-
-          </div>
-        }
       </div>
     </div>
     }
