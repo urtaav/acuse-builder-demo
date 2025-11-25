@@ -36,7 +36,7 @@ import { AcuseBuilder, Encabezado } from '../../../../models/acuse';
           class="w-full text-center text-lg font-medium border-none outline-none"
           placeholder="Título del acuse"
           [(ngModel)]="acuse().acuseEncabezado.dsTituloPrincipal"
-          maxlength="38"
+          maxlength="50"
           (ngModelChange)="update({ dsTituloPrincipal: $event })"
         />
       </div>

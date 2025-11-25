@@ -195,6 +195,19 @@ import { Estilo } from "../../models/acuse";
                   />
               </mat-form-field>
 
+              }@else {
+                <mat-form-field appearance="outline" class="w-full">
+                <mat-label>
+                  Fecha calculada
+                </mat-label>
+
+                <input
+                    matInput
+                    type="text"
+                    [ngModel]="columna.dsValor"
+                    (ngModelChange)="updateColumna(columna.id, $event)"
+                  />
+              </mat-form-field>
               }
 
             }

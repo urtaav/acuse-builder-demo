@@ -1,4 +1,4 @@
-import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Acuse, AcuseBuilder, Columna, Encabezado, Estilo, Registro, Seccion } from '../models/acuse';
 import { SectionUno } from '../components/section-types/section-uno';
 import { SectionDos } from '../components/section-types/section-dos';
@@ -28,7 +28,7 @@ export class Form {
     idEntidadFederativa: 34,
     nombre: '',
     idTipoSolicitud: 1,
-    acuseEncabezado: {} as Encabezado
+    acuseEncabezado: this._encabezado()
   });
 
   private _datosUser = signal<any | null>(null);
@@ -538,6 +538,20 @@ export class Form {
   }
 
   private createRegistro(numCols: number): Registro {
+
+    if(numCols === 3){
+      return {
+        id: crypto.randomUUID(),
+        fgVisible: 1,
+        qtPosicion: 1,
+        sisaiTwAcuseColumnas: [
+          this.createColumnaSeccion3(1),
+          this.createColumnaSeccion3(2),  
+          this.createColumnaSeccion3(3)
+        ]
+      };
+    }
+
     return {
       id: crypto.randomUUID(),
       fgVisible: 1,
@@ -554,6 +568,15 @@ export class Form {
       sisaiTwAcuseEstilo: this.baseEstilo('col'),
     };
   }
+    private createColumnaSeccion3(pos: number): Columna {
+    return {
+      id: crypto.randomUUID(),
+      qtPosicion: pos,
+      dsValor: pos === 3 ? '${plazos.fecha}': '',
+      sisaiTwAcuseEstilo: this.baseEstilo('col'),
+    };
+  }
+
 
   private baseEstilo(nameOrType: any): Estilo {
     return {
@@ -784,7 +807,7 @@ export class Form {
  prepararsisaiTwAcuseSeccionsParaGuardar(sisaiTwAcuseSeccions: any[]): any[] {
     return sisaiTwAcuseSeccions.map(seccion => {
 
-      if (seccion.qtTipo === 1 && seccion.sisaiTwAcuseRegistros) {
+      if (seccion.qtTipo === 1 || seccion.qtTipo === 2 && seccion.sisaiTwAcuseRegistros) {
 
         seccion.sisaiTwAcuseRegistros.forEach((registro: Registro) => {
 
@@ -835,12 +858,11 @@ export class Form {
   }
   updateEncabezado(data: Partial<Encabezado>) {
       console.log('Updating updateEncabezado:', data);
-    this._acuseBuilder.update(e => ({
-      ...e!,
-      acuseEncabezado: {
-        ...e.acuseEncabezado,
+      console.log('Current encabezado before update:', this._encabezado());
+    this._encabezado.update(e => ({
+        ...e,
         ...data
-      }
-    }));
+      }));
+      console.log('Updated encabezado:', this._encabezado());
   }
 }

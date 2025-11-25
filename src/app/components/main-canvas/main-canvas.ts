@@ -96,6 +96,7 @@ export class MainCanvas {
 
     console.log("⚡ JSON Final listo para backend:");
     console.log(JSON.stringify(finalDTO, null, 2));
+    console.log(finalDTO)
 
     return finalDTO;
   }

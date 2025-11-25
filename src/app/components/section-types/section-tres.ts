@@ -69,6 +69,15 @@ import { FormsModule } from "@angular/forms";
                   "
                   [style.font-size.px]="col.sisaiTwAcuseEstilo.qtTamanio"
                 />
+                @if ($index === 2) {
+                <input
+                  type="text"
+                  class="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full bg-gray-100"
+                  [value]="col.dsValor"
+                  readonly
+                />
+                }
+
               </div>
             }
       </div>
