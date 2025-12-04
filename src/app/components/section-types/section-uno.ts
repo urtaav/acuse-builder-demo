@@ -30,16 +30,16 @@ import {MatFormFieldModule} from '@angular/material/form-field';
            [class.grid-cols-2]="field().qtTipo === 2"
            [class.grid-cols-3]="field().qtTipo === 3">
 
-        @for (col of field().sisaiTwAcuseRegistros[0].sisaiTwAcuseColumnas; track col.id) {
+        @for (col of field().registros[0].columnas; track col.id) {
 
           <div class="flex flex-col ">
               <textarea
                 rows="2"
                 class="resize-none leading-6 overflow-y-auto max-h-32 border border-gray-300 rounded-lg px-3 py-2 text-sm w-1/2 bg-gray-100 w-full"
-                [style.color]="col.sisaiTwAcuseEstilo.dsColor"
-                [style.font-weight]="col.sisaiTwAcuseEstilo.qtNegrita === 1 ? 'bold' : 'normal'"
-                [style.text-align]="col.sisaiTwAcuseEstilo.qtAlineacionH === 1 ? 'left' : col.sisaiTwAcuseEstilo.qtAlineacionH === 2 ? 'center' : 'right'"
-                [style.font-size.px]="col.sisaiTwAcuseEstilo.qtTamanio"
+                [style.color]="col.estilo.dsColor"
+                [style.font-weight]="col.estilo.qtNegrita === 1 ? 'bold' : 'normal'"
+                [style.text-align]="col.estilo.qtAlineacionH === 1 ? 'left' : col.estilo.qtAlineacionH === 2 ? 'center' : 'right'"
+                [style.font-size.px]="col.estilo.qtTamanio"
                 [ngModel]="col.dsValor"
                 readonly
               ></textarea>

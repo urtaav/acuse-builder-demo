@@ -1,14 +1,12 @@
 import { Type } from "@angular/core";
 
 export interface AcuseBuilder {
-  idAcuse: number | null;
-  logoDerecho: Logo | null;
+  id: number | null;
+  idOrganoGarante: number;
   logoIzquierdo: Logo | null;
+  logoDerecho: Logo | null;
   datosUser: any;
   estadoAnteriorJSON: string | null;
-  idOrganoGarante: number;
-  idEntidadFederativa: number;
-  nombre: string;
   idTipoSolicitud: number;
   acuseEncabezado: Encabezado;
 }
@@ -20,7 +18,7 @@ export interface Encabezado {
   dsTituloSecundario: string | null;
   dsLogoDerecho?: string | null;        // base64 string para el backend
   dsLogoIzquierdo?: string | null;
-  sisaiTwAcuses: Acuse[];
+  acuses: Acuse[];
 }
 interface Logo {
   base64: string;
@@ -35,7 +33,7 @@ export interface Acuse {
   idOrganoGarante:number;
   idEntidadFederativa:number;
   tipoSolicitud:number;
-  sisaiTwAcuseSeccions: Seccion[];
+  secciones: Seccion[];
 }
 
 export interface Seccion {
@@ -46,8 +44,8 @@ export interface Seccion {
   qtPosicion: number;
   qtTipo: number;
   type:string;
-  sisaiTwAcuseEstilo: Estilo;
-  sisaiTwAcuseRegistros: Registro[];
+  estilo: Estilo;
+  registros: Registro[];
   component?: Type<unknown>;
 }
 
@@ -65,7 +63,7 @@ export interface Columna {
   id: string | number;
   qtPosicion: number;
   dsValor: string;
-  sisaiTwAcuseEstilo: Estilo;
+  estilo: Estilo;
 
 }
 
@@ -73,5 +71,5 @@ export interface Registro {
   id:  string | number;
   fgVisible: number;
   qtPosicion: number;
-  sisaiTwAcuseColumnas: Columna[];
+  columnas: Columna[];
 }

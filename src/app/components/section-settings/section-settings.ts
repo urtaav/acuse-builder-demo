@@ -40,7 +40,7 @@ import { Estilo } from "../../models/acuse";
 
     <!-- BOTÓN AGREGAR REGISTRO -->
     <div class="flex items-center justify-end mb-4">
-      @if (canAddRegistros(section.type, section.sisaiTwAcuseRegistros.length)) {
+      @if (canAddRegistros(section.type, section.registros.length)) {
         <button
           mat-icon-button
           (click)="addRegistroToSeccion()"
@@ -51,7 +51,7 @@ import { Estilo } from "../../models/acuse";
       }
     </div>
 
-    @for (registro of section.sisaiTwAcuseRegistros; track registro.id) {
+    @for (registro of section.registros; track registro.id) {
 
       <div class="border-none rounded-xl p-4 mb-6 bg-gray-50">
 
@@ -63,7 +63,7 @@ import { Estilo } from "../../models/acuse";
           [class.grid-cols-2]="section.type === 'seccion3'"
         >
 
-          @for (columna of registro.sisaiTwAcuseColumnas; let i = $index; track columna.id) {
+          @for (columna of registro.columnas; let i = $index; track columna.id) {
 
             <!--  BARRA DE ESTILOS: SIEMPRE AJUSTADA A LA CELDA CORRESPONDIENTE -->
             @if(i != 2){
@@ -72,16 +72,16 @@ import { Estilo } from "../../models/acuse";
          
               <!-- Color -->
               <input type="color"
-                [ngModel]="columna.sisaiTwAcuseEstilo.dsColor"
+                [ngModel]="columna.estilo.dsColor"
                 (ngModelChange)="updateStyle(columna.id, 'dsColor', $event)"
                 class="w-6 h-6 p-0 border rounded cursor-pointer"
               />
 
               <!-- Bold -->
               <button
-                (click)="updateStyle(columna.id, 'qtNegrita', columna.sisaiTwAcuseEstilo.qtNegrita === 1 ? 0 : 1)"
+                (click)="updateStyle(columna.id, 'qtNegrita', columna.estilo.qtNegrita === 1 ? 0 : 1)"
                 class="w-7 h-7 text-xs flex items-center justify-center border rounded hover:bg-gray-200"
-                [class.font-bold]="columna.sisaiTwAcuseEstilo.qtNegrita === 1"
+                [class.font-bold]="columna.estilo.qtNegrita === 1"
               >
                 B
               </button>
@@ -108,7 +108,7 @@ import { Estilo } from "../../models/acuse";
               <input type="number"
                 min="8"
                 max="16"
-                [ngModel]="columna.sisaiTwAcuseEstilo.qtTamanio"
+                [ngModel]="columna.estilo.qtTamanio"
                 (ngModelChange)="updateStyle(columna.id, 'qtTamanio', $event)"
                 class="w-14 h-7 px-1 text-xs border rounded"
               />

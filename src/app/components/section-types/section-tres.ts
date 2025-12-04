@@ -21,14 +21,14 @@ import { FormsModule } from "@angular/forms";
         />
       </div>
       <!-- TODOS LOS REGISTROS -->
-      @for (registro of field().sisaiTwAcuseRegistros; track registro.id) {
+      @for (registro of field().registros; track registro.id) {
                 <div class="space-y-3 border border-gray-200 rounded-lg p-4 bg-gray-50">
       <div class="grid gap-4"
            [class.grid-cols-1]="field().qtTipo === 1"
            [class.grid-cols-2]="field().qtTipo === 2"
            [class.grid-cols-3]="field().qtTipo === 3">
 
-          @for (col of registro.sisaiTwAcuseColumnas; track col.id) {
+          @for (col of registro.columnas; track col.id) {
 
               <div class="flex flex-col">
 
@@ -60,14 +60,14 @@ import { FormsModule } from "@angular/forms";
 
                   class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100"
 
-                  [style.color]="col.sisaiTwAcuseEstilo.dsColor"
-                  [style.font-weight]="col.sisaiTwAcuseEstilo.qtNegrita === 1 ? 'bold' : 'normal'"
+                  [style.color]="col.estilo.dsColor"
+                  [style.font-weight]="col.estilo.qtNegrita === 1 ? 'bold' : 'normal'"
                   [style.text-align]="
-                    col.sisaiTwAcuseEstilo.qtAlineacionH === 1 ? 'left' :
-                    col.sisaiTwAcuseEstilo.qtAlineacionH === 2 ? 'center' :
+                    col.estilo.qtAlineacionH === 1 ? 'left' :
+                    col.estilo.qtAlineacionH === 2 ? 'center' :
                     'right'
                   "
-                  [style.font-size.px]="col.sisaiTwAcuseEstilo.qtTamanio"
+                  [style.font-size.px]="col.estilo.qtTamanio"
                 />
                 @if ($index === 2) {
                 <input

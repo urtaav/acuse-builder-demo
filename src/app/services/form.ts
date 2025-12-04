@@ -3,6 +3,7 @@ import { Acuse, AcuseBuilder, Columna, Encabezado, Estilo, Registro, Seccion } f
 import { SectionUno } from '../components/section-types/section-uno';
 import { SectionDos } from '../components/section-types/section-dos';
 import { SectionTres } from '../components/section-types/section-tres';
+import { generateRandomNumberID } from '../utils/randomID';
 @Injectable({
   providedIn: 'root',
 })
@@ -15,18 +16,16 @@ export class Form {
     dsSubtitulo: 'SUBTITULO ACUSE (IP) GARANTE',
     dsTituloPrincipal: 'ACUSE ACCESO A LA INFORMACIÓN',
     dsTituloSecundario: null,
-    sisaiTwAcuses: [],
+    acuses: [],
   });
 
   private _acuseBuilder = signal<AcuseBuilder>({
-    idAcuse: 0,
+    id: null,
     logoDerecho: null,
     logoIzquierdo: null,
     datosUser: null,              // viene después de login
     estadoAnteriorJSON: null,
     idOrganoGarante: 37,
-    idEntidadFederativa: 34,
-    nombre: '',
     idTipoSolicitud: 1,
     acuseEncabezado: this._encabezado()
   });
@@ -49,7 +48,7 @@ export class Form {
         idOrganoGarante: 37,
         idEntidadFederativa: 34,
         tipoSolicitud: 1,
-        sisaiTwAcuseSeccions: []
+        secciones: []
       }
     ]);
 
@@ -57,8 +56,8 @@ export class Form {
     this._acuses.update(acuses =>
       acuses.map(acuse => ({
         ...acuse,
-        sisaiTwAcuseSeccions: this.mapsisaiTwAcuseSeccionsDesdeBD(
-          acuse.sisaiTwAcuseSeccions
+        secciones: this.mapsisaiTwAcuseSeccionsDesdeBD(
+          acuse.secciones
         )
       }))
     );
@@ -486,7 +485,7 @@ export class Form {
   acuse(nombre = "Acuse nuevo") {
     return;
   }
-  // crear sisaiTwAcuseSeccions similares a tus create_seccion_*
+  // crear secciones similares a tus create_seccion_*
   addSeccionUnaColumna(acuseId: string | number) {
     this.addSeccion(acuseId, 1, 'Sección de una columna', 1);
   }
@@ -522,8 +521,9 @@ export class Form {
         component = SectionUno
         break;
     }
+    const randomID = generateRandomNumberID(4);
     const seccion: Seccion = {
-      id: crypto.randomUUID(),
+      id: randomID,
       dsNombre: nombre,
       dsTitulo: '',
       fgVisible: 1,
@@ -531,20 +531,20 @@ export class Form {
       qtTipo: tipo,
       type,
       component,
-      sisaiTwAcuseEstilo: this.baseEstilo(tipo),
-      sisaiTwAcuseRegistros: [this.createRegistro(columnasPorRegistro)]
+      estilo: this.baseEstilo(tipo),
+      registros: [this.createRegistro(columnasPorRegistro)]
     };
-    this._acuses.update(acuses => acuses.map(a => a.id === acuseId ? { ...a, sisaiTwAcuseSeccions: [...a.sisaiTwAcuseSeccions, seccion] } : a));
+    this._acuses.update(acuses => acuses.map(a => a.id === acuseId ? { ...a, secciones: [...a.secciones, seccion] } : a));
   }
 
   private createRegistro(numCols: number): Registro {
-
+   const randomID = generateRandomNumberID(4);
     if(numCols === 3){
       return {
-        id: crypto.randomUUID(),
+        id: randomID,
         fgVisible: 1,
         qtPosicion: 1,
-        sisaiTwAcuseColumnas: [
+        columnas: [
           this.createColumnaSeccion3(1),
           this.createColumnaSeccion3(2),  
           this.createColumnaSeccion3(3)
@@ -553,34 +553,37 @@ export class Form {
     }
 
     return {
-      id: crypto.randomUUID(),
+      id: randomID,
       fgVisible: 1,
       qtPosicion: 1,
-      sisaiTwAcuseColumnas: Array.from({ length: numCols }).map((_, i) => this.createColumna(i + 1))
+      columnas: Array.from({ length: numCols }).map((_, i) => this.createColumna(i + 1))
     };
   }
 
   private createColumna(pos: number): Columna {
+       const randomID = generateRandomNumberID(4);
     return {
-      id: crypto.randomUUID(),
+      id: randomID,
       qtPosicion: pos,
       dsValor: '',
-      sisaiTwAcuseEstilo: this.baseEstilo('col'),
+      estilo: this.baseEstilo('col'),
     };
   }
     private createColumnaSeccion3(pos: number): Columna {
+         const randomID = generateRandomNumberID(4);
     return {
-      id: crypto.randomUUID(),
+      id: randomID,
       qtPosicion: pos,
       dsValor: pos === 3 ? '${plazos.fecha}': '',
-      sisaiTwAcuseEstilo: this.baseEstilo('col'),
+      estilo: this.baseEstilo('col'),
     };
   }
 
 
   private baseEstilo(nameOrType: any): Estilo {
+         const randomID = generateRandomNumberID(4);
     return {
-      id: null,
+      id: randomID,
       dsColor: '#000000',
       dsFuente: 'Arial',
       dsNombre: 'estiloNormal',
@@ -592,7 +595,7 @@ export class Form {
 
   private nextPosicionSeccion(acuseId: string | number) {
     const acuse = this._acuses().find(a => a.id === acuseId);
-    return (acuse?.sisaiTwAcuseSeccions.length ?? 0) + 1;
+    return (acuse?.secciones.length ?? 0) + 1;
   }
   private _selectedSectionId = signal<string | null | number>(null);
 
@@ -603,7 +606,7 @@ export class Form {
   public readonly selectedSection = computed(() => {
 
     return this._acuses()
-      .flatMap((row) => row.sisaiTwAcuseSeccions)
+      .flatMap((row) => row.secciones)
       .find((f) => f.id === this._selectedSectionId())
   })
 
@@ -612,11 +615,11 @@ export class Form {
 
     const newAcuse = acuse.map(a => ({
       ...a,
-      sisaiTwAcuseSeccions: a.sisaiTwAcuseSeccions.map(seccion => ({
+      secciones: a.secciones.map(seccion => ({
         ...seccion,
-        sisaiTwAcuseRegistros: seccion.sisaiTwAcuseRegistros.map(reg => ({
+        registros: seccion.registros.map(reg => ({
           ...reg,
-          sisaiTwAcuseColumnas: reg.sisaiTwAcuseColumnas.map(col =>
+          columnas: reg.columnas.map(col =>
             col.id === columnaId
               ? { ...col, dsValor: valor }   // <-- aquí actualizas
               : col
@@ -633,7 +636,7 @@ export class Form {
 
     const newAcuse = acuse.map(a => ({
       ...a,
-      sisaiTwAcuseSeccions: a.sisaiTwAcuseSeccions.map(seccion =>
+      secciones: a.secciones.map(seccion =>
         seccion.id === seccionId ? { ...seccion, dsTitulo: valor } : seccion
       )
     }));
@@ -651,12 +654,12 @@ export class Form {
 
     const newAcuse = acuse.map(a => ({
       ...a,
-      sisaiTwAcuseSeccions: a.sisaiTwAcuseSeccions.map(seccion => {
+      secciones: a.secciones.map(seccion => {
 
         if (seccion.id !== seccionId) return seccion;
         if (columnasPorAgregar === 0) return seccion;
 
-        const currentCols = seccion.sisaiTwAcuseRegistros[0].sisaiTwAcuseColumnas.length;
+        const currentCols = seccion.registros[0].columnas.length;
 
         // ⬇ Generar N columnas nuevas
         const nuevasColumnas = Array.from({ length: columnasPorAgregar }, (_, i) =>
@@ -665,9 +668,9 @@ export class Form {
 
         return {
           ...seccion,
-          sisaiTwAcuseRegistros: seccion.sisaiTwAcuseRegistros.map(reg => ({
+          registros: seccion.registros.map(reg => ({
             ...reg,
-            sisaiTwAcuseColumnas: [...reg.sisaiTwAcuseColumnas, ...nuevasColumnas] // ⬅ Agregar lote completo
+            columnas: [...reg.columnas, ...nuevasColumnas] // ⬅ Agregar lote completo
           }))
         };
       })
@@ -689,7 +692,7 @@ export class Form {
 
     const newAcuse = acuse.map(a => ({
       ...a,
-      sisaiTwAcuseSeccions: a.sisaiTwAcuseSeccions.map(seccion => {
+      secciones: a.secciones.map(seccion => {
 
         if (seccion.id !== seccionId) return seccion;
 
@@ -698,8 +701,8 @@ export class Form {
 
         return {
           ...seccion,
-          sisaiTwAcuseRegistros: [
-            ...seccion.sisaiTwAcuseRegistros,
+          registros: [
+            ...seccion.registros,
             nuevoRegistro
           ]
         } satisfies Seccion;
@@ -713,16 +716,16 @@ export class Form {
 
     const newAcuses = acuses.map(acuse => ({
       ...acuse,
-      sisaiTwAcuseSeccions: acuse.sisaiTwAcuseSeccions.map(seccion => ({
+      secciones: acuse.secciones.map(seccion => ({
         ...seccion,
-        sisaiTwAcuseRegistros: seccion.sisaiTwAcuseRegistros.map(registro => ({
+        registros: seccion.registros.map(registro => ({
           ...registro,
-          sisaiTwAcuseColumnas: registro.sisaiTwAcuseColumnas.map(columna =>
+          columnas: registro.columnas.map(columna =>
             columna.id === columnaId
               ? {
                 ...columna,
-                sisaiTwAcuseEstilo: {
-                  ...columna.sisaiTwAcuseEstilo,
+                estilo: {
+                  ...columna.estilo,
                   [field]: value
                 }
               }
@@ -739,7 +742,7 @@ export class Form {
     const current = this.acuses(); // signal
     const updated = current.map(r =>
       r.id === rowId
-        ? { ...r, sisaiTwAcuseSeccions: [...newOrder] }
+        ? { ...r, secciones: [...newOrder] }
         : r
     );
 
@@ -751,13 +754,13 @@ export class Form {
       acuses.map(a => {
         if (a.id !== acuseId) return a;
 
-        const newList = [...a.sisaiTwAcuseSeccions];
+        const newList = [...a.secciones];
         newList.splice(index, 0, seccion);
 
         // recalcular posiciones
         const updated = newList.map((s, i) => ({ ...s, qtPosicion: i + 1 }));
 
-        return { ...a, sisaiTwAcuseSeccions: updated };
+        return { ...a, secciones: updated };
       })
     );
   }
@@ -766,7 +769,7 @@ export class Form {
     this._acuses.update(acuses =>
       acuses.map(acuse => ({
         ...acuse,
-        sisaiTwAcuseSeccions: acuse.sisaiTwAcuseSeccions.filter(s => s.id !== sectionId)
+        secciones: acuse.secciones.filter(s => s.id !== sectionId)
       }))
     );
 
@@ -779,15 +782,15 @@ export class Form {
   converterMaskBeforShowInUI(value:string) {
     return this.helper_replace_mask_jasper_to_mask(value, this.optionsVariables());
   }
-  private mapsisaiTwAcuseSeccionsDesdeBD(sisaiTwAcuseSeccions: Seccion[]): any[] {
-    return sisaiTwAcuseSeccions.map(seccion => {
+  private mapsisaiTwAcuseSeccionsDesdeBD(secciones: Seccion[]): any[] {
+    return secciones.map(seccion => {
 
-      // aplica solo a sisaiTwAcuseSeccions con contenido editable (si aplica)
-      if (seccion.qtTipo === 1 || seccion.qtTipo === 2 && seccion.sisaiTwAcuseRegistros) {
+      // aplica solo a secciones con contenido editable (si aplica)
+      if (seccion.qtTipo === 1 || seccion.qtTipo === 2 && seccion.registros) {
 
-        seccion.sisaiTwAcuseRegistros.forEach((registro: Registro) => {
+        seccion.registros.forEach((registro: Registro) => {
 
-          registro.sisaiTwAcuseColumnas.forEach(col => {
+          registro.columnas.forEach(col => {
 
             if (col.dsValor) {
               col.dsValor = this.helper_replace_mask_jasper_to_mask(
@@ -804,14 +807,14 @@ export class Form {
     });
   }
   
- prepararsisaiTwAcuseSeccionsParaGuardar(sisaiTwAcuseSeccions: any[]): any[] {
-    return sisaiTwAcuseSeccions.map(seccion => {
+ prepararsisaiTwAcuseSeccionsParaGuardar(secciones: any[]): any[] {
+    return secciones.map(seccion => {
 
-      if (seccion.qtTipo === 1 || seccion.qtTipo === 2 && seccion.sisaiTwAcuseRegistros) {
+      if (seccion.qtTipo === 1 || seccion.qtTipo === 2 && seccion.registros) {
 
-        seccion.sisaiTwAcuseRegistros.forEach((registro: Registro) => {
+        seccion.registros.forEach((registro: Registro) => {
 
-          registro.sisaiTwAcuseColumnas.forEach(col => {
+          registro.columnas.forEach(col => {
 
             if (col.dsValor) {
               col.dsValor = this.helper_replace_mask_to_mask_jasper(

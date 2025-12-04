@@ -20,10 +20,10 @@ import { FormSectionComponent } from "../form-section/form-section";
                 class="relative p-5 pt-2 ps-10 mb-4 bg-white rounded-sm border-2 border-dashed border-gray-200">
                     <div       
                             cdkDropList
-                            [cdkDropListData]="row.sisaiTwAcuseSeccions"
+                            [cdkDropListData]="row.secciones"
                             (cdkDropListDropped)="onDropSection($event, row.id)" 
                             class="flex gap-2 flex-col w-full">
-                         @for (section of row.sisaiTwAcuseSeccions; track section.id) {
+                         @for (section of row.secciones; track section.id) {
                             <div cdkDrag [cdkDragData]="section" class="border rounded">
 
                                 <div 

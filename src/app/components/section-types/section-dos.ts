@@ -24,7 +24,7 @@ import { MatSelectModule } from "@angular/material/select";
       </div>
 
       <!-- TODOS LOS REGISTROS -->
-      @for (registro of field().sisaiTwAcuseRegistros; track registro.id) {
+      @for (registro of field().registros; track registro.id) {
 
         <div class="space-y-3 border border-gray-200 rounded-lg p-4 bg-gray-50">
 
@@ -35,7 +35,7 @@ import { MatSelectModule } from "@angular/material/select";
                 [class.grid-cols-3]="field().qtTipo === 3">
 
             <!-- COLUMNAS DEL REGISTRO -->
-            @for (col of registro.sisaiTwAcuseColumnas; track col.id) {
+            @for (col of registro.columnas; track col.id) {
               <div class="flex flex-col">
 
                 <label class="text-sm font-medium text-gray-700 mb-1">
@@ -59,10 +59,10 @@ import { MatSelectModule } from "@angular/material/select";
                   <input
                     type="text"
                     class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100"
-                    [style.color]="col.sisaiTwAcuseEstilo.dsColor"
-                    [style.font-weight]="col.sisaiTwAcuseEstilo.qtNegrita === 1 ? 'bold' : 'normal'"
-                    [style.text-align]="col.sisaiTwAcuseEstilo.qtAlineacionH === 1 ? 'left' : col.sisaiTwAcuseEstilo.qtAlineacionH === 2 ? 'center' : 'right'"
-                    [style.font-size.px]="col.sisaiTwAcuseEstilo.qtTamanio"
+                    [style.color]="col.estilo.dsColor"
+                    [style.font-weight]="col.estilo.qtNegrita === 1 ? 'bold' : 'normal'"
+                    [style.text-align]="col.estilo.qtAlineacionH === 1 ? 'left' : col.estilo.qtAlineacionH === 2 ? 'center' : 'right'"
+                    [style.font-size.px]="col.estilo.qtTamanio"
                     readonly
                     [ngModel]="col.dsValor"
                   />

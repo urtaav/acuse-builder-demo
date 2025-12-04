@@ -57,7 +57,7 @@ export class MainCanvas {
     // 2️⃣ Limpiar las secciones *sin structuredClone todavía*
     const acusesClean = acusesRaw.map(acuse => ({
       ...acuse,
-      sisaiTwAcuseSeccions: acuse.sisaiTwAcuseSeccions.map(sec =>
+      secciones: acuse.secciones.map(sec =>
         stripFrontEndFields(sec)
       )
     }));
@@ -73,19 +73,19 @@ export class MainCanvas {
 
     // 5️⃣ Preparar secciones finalizadas
     const seccionesLimpias = this.formService.prepararsisaiTwAcuseSeccionsParaGuardar(
-      acuses[0].sisaiTwAcuseSeccions
+      acuses[0].secciones
     );
 
     // 6️⃣ Inyectar secciones en el acuse
     const acuseFinal = {
       ...acuses[0],
-      sisaiTwAcuseSeccions: seccionesLimpias
+      secciones: seccionesLimpias
     };
 
     // 7️⃣ Inyectar acuse dentro del encabezado
     const encabezadoFinal = {
       ...encabezado,
-      sisaiTwAcuses: [acuseFinal]
+      acuses: [acuseFinal]
     };
 
     // 8️⃣ Armar DTO final
